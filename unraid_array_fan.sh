@@ -84,7 +84,7 @@ OUTPUT=""
 
 # Linear PWM Logic Variables - do not modify
 NUM_STEPS=$((FAN_HIGH_TEMP - FAN_OFF_TEMP - 1))
-PWM_INCREMENT=$(( (FAN_LOW_PWM - FAN_HIGH_PWM) / NUM_STEPS))
+PWM_INCREMENT=$(( (FAN_HIGH_PWM - FAN_LOW_PWM) / NUM_STEPS))
 OUTPUT+="Linear PWM Range is "$FAN_LOW_PWM" to "$FAN_HIGH_PWM" in "$NUM_STEPS" increments of "$PWM_INCREMENT$'\n'
 
 
