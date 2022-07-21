@@ -46,7 +46,7 @@ HD[22]=/dev/sdw
 
 # Temperatures to change fan speed at
 # Any temp between OFF and HIGH will cause fan to run on low speed setting 
-FAN_OFF_TEMP=25     # Anything this number and below - fan is off
+FAN_OFF_TEMP=30     # Anything this number and below - fan is off
 FAN_HIGH_TEMP=45    # Anything this number or above - fan is high speed
 
 # Fan speed settings. Run pwmconfig (part of the lm_sensors package) to determine 
@@ -61,7 +61,7 @@ FAN_HIGH_TEMP=45    # Anything this number or above - fan is high speed
 #FAN_START_PWM=255
 #FAN_HIGH_PWM=255
 
-FAN_OFF_PWM=255    # Fan off value
+FAN_OFF_PWM=200    # Fan off value
 FAN_START_PWM=100  # to get fan spinning
 FAN_LOW_PWM=190    # minimum speed
 FAN_HIGH_PWM=100   # max speed
@@ -71,7 +71,7 @@ FAN_HIGH_PWM=100   # max speed
 # or fan2_input and so on to see the current rpm of the fan. If 0 then fan is off or 
 # there is no fan connected or motherboard can't read rpm of fan.
 # ARRAY_FAN=/sys/class/hwmon/hwmon1/device/pwm2
-ARRAY_FAN=/sys/devices/pci0000\:00//0000\:00\:1f.3/i2c-0/0-002b/hwmon/hwmon3/pwm3
+ARRAY_FAN=/sys/devices/pci0000\:00//0000\:00\:1f.3/i2c-0/0-002b/hwmon/hwmon1/pwm3
 
 ### END USER SET VARIABLES ###
 
@@ -84,7 +84,7 @@ OUTPUT=""
 
 # Linear PWM Logic Variables - do not modify
 NUM_STEPS=$((FAN_HIGH_TEMP - FAN_OFF_TEMP - 1))
-PWM_INCREMENT=$(( (FAN_HIGH_PWM - FAN_LOW_PWM) / NUM_STEPS))
+PWM_INCREMENT=$(( (FAN_LOW_PWM - FAN_HIGH_PWM) / NUM_STEPS))
 OUTPUT+="Linear PWM Range is "$FAN_LOW_PWM" to "$FAN_HIGH_PWM" in "$NUM_STEPS" increments of "$PWM_INCREMENT$'\n'
 
 
@@ -138,8 +138,8 @@ fi
 # produce output if the fan speed was changed
 CURRENT_SPEED=`cat $ARRAY_FAN`
 if [ "$PREVIOUS_SPEED" -ne "$CURRENT_SPEED" ]; then
-  echo "Fan speed has changed." | /usr/bin/logger -t fan_control
-  echo "${OUTPUT}" | /usr/bin/logger -t fan_control
+  echo "Fan speed has changed." #| /usr/bin/logger -t fan_control
+  echo "${OUTPUT}" #| /usr/bin/logger -t fan_control
 else
-  echo "Fan speed unchanged. Highest temp: "$HIGHEST_TEMP" Current pwm: "$CURRENT_SPEED | /usr/bin/logger -t fan_control
+  echo "Fan speed unchanged. Highest temp: "$HIGHEST_TEMP" Current pwm: "$CURRENT_SPEED #| /usr/bin/logger -t fan_control
 fi
