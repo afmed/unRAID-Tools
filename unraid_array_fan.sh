@@ -61,7 +61,7 @@ FAN_HIGH_TEMP=45    # Anything this number or above - fan is high speed
 #FAN_START_PWM=255
 #FAN_HIGH_PWM=255
 
-FAN_OFF_PWM=200    # Fan off value
+FAN_OFF_PWM=200    # Fan off value (will always spin at this value)
 FAN_START_PWM=100  # to get fan spinning
 FAN_LOW_PWM=190    # minimum speed
 FAN_HIGH_PWM=100   # max speed
@@ -124,10 +124,10 @@ elif [ "$HIGHEST_TEMP" -ge "$FAN_HIGH_TEMP" ]; then
   OUTPUT+="Setting pwm to: "$FAN_HIGH_PWM$'\n'
 else
   # set fan to starting speed first to make sure it spins up then change it to low setting.
-  if [ "$PREVIOUS_SPEED" -lt "$FAN_START_PWM" ]; then
-    echo $FAN_START_PWM > $ARRAY_FAN
-      sleep 4
-  fi
+#  if [ "$PREVIOUS_SPEED" -lt "$FAN_START_PWM" ]; then
+#    echo $FAN_START_PWM > $ARRAY_FAN
+#      sleep 4
+#  fi
   # Calculate target fan PWM speed as a linear value between FAN_HIGH_PWM and FAN_LOW_PWM
   FAN_LINEAR_PWM=$(( ((HIGHEST_TEMP - FAN_OFF_TEMP - 1) * PWM_INCREMENT) + FAN_LOW_PWM))
   echo $FAN_LINEAR_PWM > $ARRAY_FAN
